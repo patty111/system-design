@@ -13,7 +13,7 @@ if not os.path.exists('shorturl.db'):
     c.execute('''CREATE TABLE urls
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
                 short_url TEXT NOT NULL,
-                long_url TEXT NOT NULL)''')
+                long_url TEXT NOT NULL, request_count INTEGER DEFAULT 1)''')
     conn.commit()
 else:
     conn = sqlite3.connect('shorturl.db')
@@ -33,7 +33,7 @@ class urldata():
         self.short_url = converter(long_url)   # PRIMARY KEY
 
 def converter(long_url: str):
-    hash_res = hashlib.sha256(long_url.encode('utf-8')).hexdigest()
+    hash_res = hashlib.md5(long_url.encode('utf-8')).hexdigest()
     num = int(hash_res, 16)
 
     result_str = ""
@@ -80,7 +80,10 @@ async def redirect(shortened_url: str = None):
         c.execute("SELECT * FROM urls WHERE short_url = ?", (shortened_url,))
         result = c.fetchone()
 
-        if result:
+        if result:  
+            print(result)
+            c.execute("UPDATE urls SET request_count = request_count + 1 WHERE short_url = ?", (result[1],))
+            conn.commit()
             return RedirectResponse(url=result[2], status_code=status.HTTP_303_SEE_OTHER)
         return {"message": "Short URL not found"}
     else:
