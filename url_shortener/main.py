@@ -65,12 +65,12 @@ async def create(long_url: str = Form(...)):
     result = c.fetchone()
 
     if result:
-        return {"shortened url": f"http://127.0.0.1:8000/{result[1]}"}
+        return {"shortened url": f"https://veryshort.onrender.com/{result[1]}"}
     else:
         tmp = urldata(long_url)
         c.execute("INSERT INTO urls (long_url, short_url) VALUES (?, ?)", (long_url, tmp.short_url))
         conn.commit()
-        return {"shortened url": f"http://127.0.0.1:8000/{tmp.short_url}"}
+        return {"shortened url": f"https://veryshort.onrender.com/{tmp.short_url}"}
 
 
 
