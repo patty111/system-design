@@ -1,0 +1,75 @@
+<!-- learn data transfer between frontend and backend -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shorten URL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">Very short URL</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h3>Enter a URL:</h3>
+        <form id="url-form">
+            <div class="input-field">
+                <input type="text" name="long_url" id="long_url" required>
+                <label for="long_url" id="long_url_label">https://example.com</label>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Shorten</button>
+            
+            <br><br>
+            <div class="message">
+                <a id="short-url-link" href=""></a>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        const label = document.getElementById('long_url_label');
+        const input = document.getElementById('long_url');
+        input.addEventListener('input', () => {
+            if (input.value) {
+                label.style.visibility = 'hidden';
+            } else {
+                label.style.visibility = 'visible';
+            };
+        });
+
+
+        document.getElementById('url-form').addEventListener('submit', function(event){
+            event.preventDefault();
+            
+            const form = document.getElementById('url-form');
+            const formData = new FormData(form)
+
+            fetch("http://127.0.0.1:8000/main", {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response =>{
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw new Error('Something went wrong');
+                }
+            })
+            .then(data => {
+                const link = document.getElementById('short-url-link');
+                link.innerHTML = data.replace(/"/g, '');
+                link.href = data.replace(/"/g, '');
+            })
+            .catch(error => {
+                console.log('error');
+            });
+        });
+    </script>
+
+</body>
+</html>
