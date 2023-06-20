@@ -43,34 +43,39 @@ def converter(long_url: str):
     return result_str[:8]
 
 def check_valid_link(link: str):
-    if requests.get(link).status_code == 200:
-        return True
-    return False
+    try:
+        if requests.get(link).status_code == 200:
+            return True
+        return False
+    except:
+        return False
 
 
-@app.get("/")
+
+@app.get("/", response_class=HTMLResponse)
 async def root():
     return RedirectResponse("/main")
 
 @app.get("/main")
 async def main():
-    return {"message": "Hello World"}
+    with open('static/index.html', 'r') as f:
+        return HTMLResponse(content=str(f.read()))
 
 @app.post("/main")
 async def create(long_url: str = Form(...)):
     if check_valid_link(long_url) == False:
-        return {"message": "Invalid URL"}
+        return "Invalid URL"
 
     c.execute("SELECT * FROM urls WHERE long_url = ?", (long_url,))
     result = c.fetchone()
 
     if result:
-        return {"shortened url": f"https://veryshort.onrender.com/{result[1]}"}
+        return f"https://veryshort.onrender.com/{result[1]}"
     else:
         tmp = urldata(long_url)
         c.execute("INSERT INTO urls (long_url, short_url) VALUES (?, ?)", (long_url, tmp.short_url))
         conn.commit()
-        return {"shortened url": f"https://veryshort.onrender.com/{tmp.short_url}"}
+        return f"https://veryshort.onrender.com/{tmp.short_url}"
 
 
 
