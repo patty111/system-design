@@ -2,6 +2,7 @@ __pycache__
 .DS_Store
 *.pyc
 *test*
-my-app
 shorturl
 note.txt
+env
+env-wsl
