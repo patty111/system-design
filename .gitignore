@@ -6,4 +6,4 @@ shorturl
 note.txt
 env
 env-wsl
-.sqlite
+*.sqlite
