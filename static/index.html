@@ -1,4 +1,3 @@
-<!-- learn data transfer between frontend and backend -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,21 +48,24 @@
             const form = document.getElementById('url-form');
             const formData = new FormData(form)
 
-            fetch("http://127.0.0.1:8000/main", {
+            fetch("http://127.0.0.1:8000/shorten", {
                 method: 'POST',
                 body: formData,
             })
             .then(response =>{
                 if (response.ok) {
-                    return response.text();
+                    return response.json();
                 } else {
                     throw new Error('Something went wrong');
                 }
             })
             .then(data => {
+                console.log(data);
                 const link = document.getElementById('short-url-link');
-                link.innerHTML = data.replace(/"/g, '');
-                link.href = data.replace(/"/g, '');
+                const url = data.detail.replace(/"/g, '');
+                link.innerHTML = url;
+                link.href = url;
+                alert(`Link is created: ${url}`);
             })
             .catch(error => {
                 console.log('error');

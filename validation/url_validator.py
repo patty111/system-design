@@ -10,28 +10,6 @@ class UrlValidator():
         self.url = url
         self.db = db
 
-    def field_check(self):
-        if self.url is None:
-            raise UrlResourceNotFoundError('Url not found')
-    
-        if not isinstance(self.url.short_url, str):
-            raise TypeError('Short URL should be a string')
-
-        if not isinstance(self.url.long_url, str):
-            raise TypeError('Long URL should be a string')
-
-        if not isinstance(self.url.redirects, int):
-            raise TypeError('Redirects should be an integer')
-
-        if not isinstance(self.url.is_active, bool):
-            raise TypeError('Active status should be a boolean')
-
-        if not isinstance(self.url.expire_time, datetime):
-            raise TypeError('Expiration time should be a datetime object')
-
-        # if self.url.created_by is None:
-        #     raise ValueError('Creator is missing')
-
     def check_status(self):
         if not self.url.is_active:
             raise UrlInActiveError('Url is inactive')
