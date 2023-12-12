@@ -6,7 +6,7 @@ CREATE TABLE links (
     expire_time DATETIME,
     created_by VARCHAR(50) DEFAULT NULL,
     last_redirect DATETIME DEFAULT NULL,
-    is_active BOOLEAN DEFAULT TRUE
+    is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY(created_by) REFERENCES users(username)
 );
 

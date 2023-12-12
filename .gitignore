@@ -1,7 +1,6 @@
 __pycache__
 .DS_Store
 *.pyc
-*test*
 shorturl
 note.txt
 env

@@ -19,7 +19,9 @@ class Url(BaseUrl, table=True):
     __tablename__ = 'links'
 
     redirects: int = Field(default=0, nullable=False)
+    last_redirect: datetime = Field(default=None)
     is_active: bool = Field(default=True, nullable=False)
+    created_by: Optional[str] = Field(default=None, foreign_key="users.username")
 
 
 class UrlCreate(BaseUrl):
