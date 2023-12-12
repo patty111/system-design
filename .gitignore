@@ -7,3 +7,4 @@ note.txt
 env
 env-wsl
 *.sqlite
+/log

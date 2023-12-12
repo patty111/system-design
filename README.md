@@ -12,3 +12,5 @@ how to shorten url?
 2. hashing(md5, sha)
    
 3. counter->token range
+
+-> md5 + base62 approach
