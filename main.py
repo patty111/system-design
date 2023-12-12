@@ -4,13 +4,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.url import router as url_router
+from api.user import router as user_router
 from config import config
-
-# 8 length short url, [0-9a-zA-Z]
-base62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 app = FastAPI()
 app.include_router(url_router)
+app.include_router(user_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

@@ -5,21 +5,24 @@ CREATE TABLE links (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     expire_time DATETIME,
     created_by VARCHAR(50) DEFAULT NULL,
+    last_redirect DATETIME DEFAULT NULL,
     is_active BOOLEAN DEFAULT TRUE
-    -- FOREIGN KEY(created_by) REFERENCES users(user_name)
+    FOREIGN KEY(created_by) REFERENCES users(username)
 );
 
--- CREATE INDEX idx_links_long_url ON links (long_url);
+CREATE INDEX idx_links_long_url ON links (long_url);
 
--- CREATE TABLE user (
---     user_name VARCHAR(30) PRIMARY KEY,
---     password VARCHAR(100) NOT NULL
--- );
+CREATE TABLE users (
+    username VARCHAR(50) PRIMARY KEY,
+    password_hash VARCHAR(32) NOT NULL,
+    salt VARCHAR(20) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
--- CREATE TABLE UserTokens (
+-- CREATE TABLE Tokens (
 --     token TEXT PRIMARY KEY,
---     user_name TEXT Not Null,
+--     user TEXT Not Null,
 --     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 --     expires_at TIMESTAMP Not Null,
---     FOREIGN KEY(user_name) REFERENCES Users(user_name)
+--     FOREIGN KEY(user) REFERENCES users(username)
 -- );
