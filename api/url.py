@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Request, status, Depends, Path, HTTPException, Form
 from fastapi.responses import RedirectResponse
+from fastapi.encoders import jsonable_encoder
 from sqlmodel import select, update, insert, Session, col
 from datetime import datetime, timedelta
 from validation.url_validator import UrlValidator
 from exceptions.url_exceptions import UrlExpiredError, UrlInActiveError, UrlResourceNotFoundError, InvalidOriginalUrlError
-from typing import Annotated
 from models.url import Url
 from dbHelper import get_db
 from config import config
 import hashlib
-import random
+from sqlalchemy.exc import IntegrityError
 
 router = APIRouter(tags=["url"])
 base62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -88,8 +88,13 @@ async def shorten_url(request: Request, long_url: str = Form(...), db: Session =
     except (ValueError, TypeError) as e:
         raise HTTPException(status_code=400)
 
-    db.add(item)
-    db.commit()
+    try:
+        db.add(item)
+        db.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=201, detail=f"{config.base_url}/{item.short_url}")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=jsonable_encoder(e))
 
     raise HTTPException(status_code=201, detail=f"{config.base_url}/{item.short_url}")
 

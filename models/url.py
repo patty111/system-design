@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine, MetaData, String, Integer, Boolean, DateTime
 from sqlalchemy.orm import sessionmaker, Mapped, mapped_column, DeclarativeBase
-
 from typing import Optional
 from sqlmodel import Field, SQLModel
 from config import config
