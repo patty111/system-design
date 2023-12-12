@@ -1,13 +1,8 @@
-import hashlib
-import requests
-import os
 import uvicorn
-import gunicorn
-from fastapi import FastAPI, Form, status, Body
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from sqlalchemy import create_engine, MetaData, Table, select
 from api.url import router as url_router
 from config import config
 

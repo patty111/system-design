@@ -3,7 +3,7 @@ from typing import Type
 import re
 from sqlalchemy.orm import Session
 from datetime import datetime
-from exceptions.url_exceptions import UrlExpiredError, UrlInActiveError, UrlResourceNotFoundError, InvalidOriginalUrlError
+from exceptions.url_exceptions import UrlExpiredError, UrlInActiveError
 
 class UrlValidator():
     def __init__(self, url: Url, db: Session):

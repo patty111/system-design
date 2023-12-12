@@ -1,5 +1,4 @@
 from configparser import ConfigParser
-import os
 class Configuration():
     def __init__(self):
         self.config_path = "./config/app.cfg"

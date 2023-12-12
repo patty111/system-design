@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Request, status, Depends, Path, HTTPException, Form
+from fastapi import APIRouter, Request, status, Depends, HTTPException, Form
 from fastapi.responses import RedirectResponse
 from fastapi.encoders import jsonable_encoder
-from sqlmodel import select, update, insert, Session, col
+from sqlmodel import select, update, Session, col
 from datetime import datetime, timedelta
 from validation.url_validator import UrlValidator
 from exceptions.url_exceptions import UrlExpiredError, UrlInActiveError, UrlResourceNotFoundError, InvalidOriginalUrlError
