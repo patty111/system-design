@@ -1,12 +1,11 @@
 from dbHelper import get_db
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import Depends, HTTPException
-from sqlmodel import select, update, col, Session
+from sqlmodel import select, col, Session
 from models.user import User
 from schemas.token_schema import Token
 from schemas.user_schema import UserInfo
 from passlib.context import CryptContext
-from exceptions.exceptions import UserNotExistError
 from datetime import datetime, timedelta
 from config import config
 from jose import jwt, JWTError

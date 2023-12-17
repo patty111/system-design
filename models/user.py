@@ -1,8 +1,6 @@
-from sqlalchemy import String
 from typing import Optional
 from sqlmodel import Field, SQLModel
 from datetime import datetime
-from config import config
 
 # Solving circular imports for type Annotations: https://reurl.cc/xLx1MZ
 

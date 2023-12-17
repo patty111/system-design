@@ -1,17 +1,13 @@
 from config import config
-from fastapi import APIRouter, Request, status, Depends, HTTPException, Form
-from fastapi.responses import RedirectResponse
-from fastapi.encoders import jsonable_encoder
+from fastapi import APIRouter, Request, status, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from auth.auth import check_valid_credential, create_access_token, get_login_user
 from dbHelper import get_db
-from sqlmodel import select, update, Session, col
-from models.url import Url
+from sqlmodel import select, Session, col
 from models.user import User
-from schemas.user_schema import UserRegister, UserInfo, UserLogin
+from schemas.user_schema import UserRegister, UserInfo
 from schemas.token_schema import Token
 import secrets
-from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 
@@ -79,7 +75,6 @@ async def login_and_get_token(request: Request, login_form: OAuth2PasswordReques
 
     return token
 
-# TODO: add login check
 @router.get("/users/me",
             status_code=status.HTTP_200_OK,
             response_model=UserInfo,
