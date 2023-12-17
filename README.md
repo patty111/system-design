@@ -43,5 +43,6 @@ short url key length: 8
 `uvicorn main:app --port 8000 --reload` or `python3 main.py`
 
 > navigate to `/docs` endpoint for API documentation
+> demo vid: https://youtu.be/hdOzrbVS8iQ
 
 ### Tests
