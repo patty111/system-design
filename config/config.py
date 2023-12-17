@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import os
 class Configuration():
     def __init__(self):
         self.config_path = "./config/app.cfg"
@@ -26,9 +27,9 @@ class Configuration():
         self.load_config()
 
         self.short_url_len = self.config['url_shortener']['length']
-        self.scheme = self.config['server']['scheme']
-        self.host = self.config['server']['host']
-        self.port = self.config['server']['port']
+        self.scheme = self.config['dev-server']['scheme']
+        self.host = self.config['dev-server']['host']
+        self.port = self.config['dev-server']['port']
         self.base_url = f"{self.scheme}://{self.host}:{self.port}"
         self.db_name = self.config['db']['db_name']
 
@@ -36,6 +37,8 @@ class Configuration():
         self.algorithm = self.config['jwt']['algorithm']
         self.access_token_expire_minutes = self.config['jwt']['access_token_expire_minutes']
 
-        if self.config['environment']['env'] == 'prod':
+        if self.config['environment']['env'] == 'prod' or os.getenv('ENV') == 'prod':
             self.db_echo = False
-
+            self.host = self.config['prod-server']['host']
+            self.port = self.config['prod-server']['port']
+            self.base_url = f"{self.scheme}://{self.host}:{self.port}"

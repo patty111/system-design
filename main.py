@@ -18,6 +18,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+# TODO: Create db at startup if not exists
 @app.on_event("startup")
 def startup_event():
     pass

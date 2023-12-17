@@ -20,7 +20,7 @@ class UrlValidator():
         # if not self.valid_long_url(self.url.long_url):
         #     raise InvalidOriginalUrlError('Invalid original URL')
         
-
+    # TODO: Long URL validation
     @staticmethod
     def valid_long_url(url: str):
         return True
