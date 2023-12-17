@@ -9,3 +9,6 @@ class UrlExpiredError(Exception):
 
 class InvalidOriginalUrlError(Exception):
     pass
+
+class UserNotExistError(Exception):
+    pass
