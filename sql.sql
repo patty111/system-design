@@ -16,7 +16,9 @@ CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY,
     password_hash VARCHAR(32) NOT NULL,
     salt VARCHAR(20) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    links_created INTEGER DEFAULT 0,
+    last_login DATETIME DEFAULT NULL
 );
 
 -- CREATE TABLE Tokens (
