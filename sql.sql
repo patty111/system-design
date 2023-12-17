@@ -20,11 +20,3 @@ CREATE TABLE users (
     links_created INTEGER DEFAULT 0,
     last_login DATETIME DEFAULT NULL
 );
-
--- CREATE TABLE Tokens (
---     token TEXT PRIMARY KEY,
---     user TEXT Not Null,
---     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     expires_at TIMESTAMP Not Null,
---     FOREIGN KEY(user) REFERENCES users(username)
--- );
