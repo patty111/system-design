@@ -1,18 +1,22 @@
 from fastapi import APIRouter, Request, status, Depends, HTTPException, Form
 from fastapi.responses import RedirectResponse
 from fastapi.encoders import jsonable_encoder
+from typing import Optional
 from sqlmodel import select, update, Session, col
 from datetime import datetime, timedelta
 from validation.url_validator import UrlValidator
-from exceptions.url_exceptions import UrlExpiredError, UrlInActiveError, UrlResourceNotFoundError, InvalidOriginalUrlError
 from models.url import Url
+from models.user import User
 from dbHelper import get_db
 from config import config
-import hashlib
 from sqlalchemy.exc import IntegrityError
+from fastapi.security import OAuth2PasswordBearer
+from auth.auth import get_login_user
+import hashlib
 
 router = APIRouter(tags=["url"])
 base62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def shortener(long_url: str) -> str:
     hash_res = hashlib.md5(long_url.encode('utf-8')).hexdigest()
@@ -51,12 +55,11 @@ async def get_url(request: Request, short_url: str, db: Session = Depends(get_db
         db.refresh(item)
         raise HTTPException(status_code=410, detail="link no longer active")    
     
-    stmt = update(Url).where(Url.short_url == short_url).values(redirects=item.redirects+1)
+    stmt = update(Url).where(Url.short_url == short_url).values(redirects=item.redirects+1, last_redirect=datetime.now())
     db.exec(stmt)
     db.commit()
 
     return RedirectResponse(url=item.long_url, status_code=status.HTTP_302_FOUND)
-
 
 @router.post("/shorten",
             status_code=status.HTTP_201_CREATED,
@@ -67,6 +70,10 @@ async def get_url(request: Request, short_url: str, db: Session = Depends(get_db
                 status.HTTP_400_BAD_REQUEST: {"description": "invalid long URL"},
             })
 async def shorten_url(request: Request, long_url: str = Form(...), db: Session = Depends(get_db)):
+    login_user = None
+    auth_header = request.headers.get("Authorization")
+    if auth_header:
+        login_user = get_login_user(db, auth_header.split(" ")[1])
 
     item = Url(
         short_url = shortener(long_url),
@@ -74,7 +81,7 @@ async def shorten_url(request: Request, long_url: str = Form(...), db: Session =
         redirects = 0,
         create_time = datetime.now(),
         expire_time = datetime.now() + timedelta(days=30),
-        created_by = "123",
+        created_by = login_user.username if login_user else "anonymous",
         is_active = True
     )
     
@@ -90,6 +97,12 @@ async def shorten_url(request: Request, long_url: str = Form(...), db: Session =
 
     try:
         db.add(item)
+        
+        if login_user:
+            login_user.links_created += 1
+            stmt = update(User).where(User.username == login_user.username).values(links_created=login_user.links_created+1)
+            db.exec(stmt)
+
         db.commit()
     except IntegrityError:
         raise HTTPException(status_code=201, detail=f"{config.base_url}/{item.short_url}")
@@ -124,3 +137,4 @@ async def inactive_shorturl(request: Request, short_url: str, db: Session = Depe
     db.commit()
     db.refresh(item)
     raise HTTPException(status_code=204)
+
