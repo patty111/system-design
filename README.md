@@ -23,7 +23,7 @@ short url key length: 8
 -> bcrypt + base62 approach
 
 ### Database
-![Alt text](asset/image.png)
+![Alt text](assets/image.png)
 
 ### Setup and Installation
 
