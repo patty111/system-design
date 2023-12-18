@@ -4,8 +4,8 @@
 May take a while to start the server (I am using free tier plan)
 
 #### Overview
-read/write ratio should be 100/1
-should be able to scale-up
+read/write ratio should be 100/1  
+should be able to scale-up  
 short url key length: 8
 
 ### Shortener method?
